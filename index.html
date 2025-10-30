@@ -228,11 +228,61 @@
           });
           imageWrapper.appendChild(handImg);
 
+
+          // *******************************************
+
+const deletedOverlay = document.createElement("div");
+Object.assign(deletedOverlay.style, {
+  position: "absolute", // image ke upar
+  top: "0",
+  left: "0",
+  width: "100%",
+  height: "100%", // full image height
+  background: "rgba(255, 0, 0, 0.2)", // light transparent red
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "20px", // match image border radius
+  opacity: "0",
+  pointerEvents: "none",
+  zIndex: "999",
+  transition: "opacity 0.2s ease",
+});
+
+// === Create overlay text ===
+const deletedText = document.createElement("div");
+deletedText.textContent = "Image Deleted";
+Object.assign(deletedText.style, {
+  fontSize: "28px",
+  fontWeight: "bold",
+  color: "white",
+  textShadow: "0 2px 6px rgba(0,0,0,0.7)",
+  opacity: "0",
+  transform: "scale(0.8)",
+  transition: "opacity 0.2s ease, transform 0.2s ease",
+});
+
+deletedOverlay.appendChild(deletedText);
+imageWrapper.appendChild(deletedOverlay); // add overlay to image wrapper
+
+
+          // *******************************************
+
+
+
+
+
+
+
+          
+
           // 📝 "Swipe Left" text under hand
           const swipeText = document.createElement("div");
-          swipeText.textContent = "Swipe Left";
+          swipeText.textContent = "Swipe Left to Delete the Photo";
           Object.assign(swipeText.style, {
             position: "absolute",
+            textAlign: "center",
+            width: "60%",
             top: "85%", // slightly below the hand
             left: "50%",
             transform: "translate(-50%, -50%)",
@@ -332,6 +382,7 @@ imageWrapper.addEventListener("click", () => {
   deleteSound.play().catch(() => {}); // handle autoplay block
 
   // 🎬 Animation logic
+
   mainImage.style.transition = "transform 0.3s ease, opacity 0.3s ease";
   mainImage.style.transform = "translateX(-100%)";
   mainImage.style.opacity = "0";
@@ -340,11 +391,8 @@ imageWrapper.addEventListener("click", () => {
   deleteBtn.style.transform = "scale(1.3)";
   setTimeout(() => (deleteBtn.style.transform = "scale(1)"), 200);
 
-  setTimeout(() => {
-    if (typeof step2_StaticImageRightScreen === "function") {
-      step2_StaticImageRightScreen();
-    }
-  }, 300);
+  // ⬅️ Show deleted text + after 1s go to next function
+  showDeletedThenNext();
 });
 
 
@@ -403,6 +451,12 @@ imageWrapper.addEventListener("click", () => {
               deleteBtn.style.transform = "scale(1.3)";
               setTimeout(() => (deleteBtn.style.transform = "scale(1)"), 200);
 
+
+              
+  // ⬅️ Show deleted text + after 1s go to next function
+  showDeletedThenNext();
+
+
               setTimeout(() => {
                 if (typeof step2_StaticImageRightScreen === "function") {
                   step2_StaticImageRightScreen();
@@ -430,6 +484,28 @@ imageWrapper.addEventListener("click", () => {
               (btn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.15)");
             return btn;
           }
+      
+// Function to show with animation and then hide
+function showDeletedThenNext() {
+  // Start animation
+  deletedOverlay.style.opacity = "1";
+  deletedText.style.opacity = "1";
+  deletedText.style.transform = "scale(1.1)";
+
+  setTimeout(() => {
+    // End animation
+    deletedOverlay.style.opacity = "0";
+    deletedText.style.opacity = "0";
+    deletedText.style.transform = "scale(0.9)";
+
+    setTimeout(() => {
+      if (typeof step2_StaticImageRightScreen === "function") {
+        step2_StaticImageRightScreen(); // call next step
+      }
+    }, 200); // match transition
+  }, 800); // 1 second visible
+}
+      
         }
 
         // ==
@@ -524,6 +600,50 @@ imageWrapper.addEventListener("click", () => {
             pointerEvents: "none",
           });
           imageWrapper.appendChild(handImg);
+
+
+
+// *******************************************
+// Overlay for Image Saved
+const savedOverlay = document.createElement("div");
+Object.assign(savedOverlay.style, {
+   position: "absolute", // image ke upar
+  top: "0",
+  left: "0",
+  width: "100%",
+  height: "100%", // full image height
+    background: "rgba(135, 206, 235, 0.3)", // sky blue
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "20px", // match image border radius
+  opacity: "0",
+  pointerEvents: "none",
+  zIndex: "999",
+  transition: "opacity 0.2s ease",
+});
+
+// Overlay text
+const savedText = document.createElement("div");
+savedText.textContent = "Image Saved";
+Object.assign(savedText.style, {
+ fontSize: "28px",
+  fontWeight: "bold",
+  color: "white",
+  textShadow: "0 2px 6px rgba(0,0,0,0.7)",
+  opacity: "0",
+  transform: "scale(0.8)",
+  transition: "opacity 0.2s ease, transform 0.2s ease",
+});
+
+savedOverlay.appendChild(savedText);
+imageWrapper.appendChild(savedOverlay); // add overlay to image wrapper
+// *******************************************
+
+
+
+
+
 
           // 📝 "Swipe Left" text under hand
           const swipeText = document.createElement("div");
@@ -673,21 +793,24 @@ imageWrapper.addEventListener("click", () => {
   clickSound.play().catch(() => {}); // in case browser blocks auto-play
 
   // 🎬 Animation logic
-  mainImage.style.transition = "transform 0.3s ease, opacity 0.3s ease";
-  mainImage.style.transform = "translateX(120%)";
+mainImage.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+  mainImage.style.transform = "translateX(-100%)";
   mainImage.style.opacity = "0";
 
-  likeBtn.style.transition = "transform 0.2s ease";
-  likeBtn.style.transform = "scale(1.3)";
-  setTimeout(() => (likeBtn.style.transform = "scale(1)"), 200);
+  deleteBtn.style.transition = "transform 0.2s ease";
+  deleteBtn.style.transform = "scale(1.3)";
+  setTimeout(() => (deleteBtn.style.transform = "scale(1)"), 200);
+
+  // Show saved overlay & then next step
+  showSavedThenNext();
 
   // imageWrapper.style.overflow = "hidden";
 
-  setTimeout(() => {
-    if (typeof step3_StaticImageScreen === "function") {
-      step3_StaticImageScreen();
-    }
-  }, 300);
+  // setTimeout(() => {
+  //   if (typeof step3_StaticImageScreen === "function") {
+  //     step3_StaticImageScreen();
+  //   }
+  // }, 300);
 });
 
 
@@ -753,13 +876,17 @@ imageWrapper.addEventListener("click", () => {
               likeBtn.style.transform = "scale(1.3)";
               setTimeout(() => (likeBtn.style.transform = "scale(1)"), 200);
 
-              setTimeout(() => {
-                // 🧹 Clear screen and go next
-                document.body.innerHTML = "";
-                if (typeof step3_StaticImageScreen === "function") {
-                  step3_StaticImageScreen();
-                }
-              }, 300);
+
+               // Show saved overlay & then next step
+  showSavedThenNext();
+
+              // setTimeout(() => {
+              //   // 🧹 Clear screen and go next
+              //   document.body.innerHTML = "";
+              //   if (typeof step3_StaticImageScreen === "function") {
+              //     step3_StaticImageScreen();
+              //   }
+              // }, 300);
             } else {
               // Snap back if not enough swipe
               mainImage.style.transform = "translateX(0)";
@@ -813,6 +940,31 @@ imageWrapper.addEventListener("click", () => {
 
             return btn;
           }
+      
+      
+          function showSavedThenNext() {
+  // Start animation
+  savedOverlay.style.opacity = "1";
+  savedText.style.opacity = "1";
+  savedText.style.transform = "scale(1.1)";
+
+  setTimeout(() => {
+    // End animation
+    savedOverlay.style.opacity = "0";
+    savedText.style.opacity = "0";
+    savedText.style.transform = "scale(0.9)";
+
+    setTimeout(() => {
+      if (typeof step3_StaticImageScreen === "function") {
+        step3_StaticImageScreen(); // call next step after overlay hides
+      }
+    }, 200); // match transition
+  }, 800); // 1 second visible
+}
+
+
+
+
         }
         // ---- ?
 
@@ -903,6 +1055,50 @@ topVideo.webkitPlaysInline = true; // extra for older iOS versions
           });
           imageWrapper.appendChild(handImg);
 
+
+
+ // *******************************************
+
+const deletedOverlay = document.createElement("div");
+Object.assign(deletedOverlay.style, {
+  position: "absolute", // image ke upar
+  top: "0",
+  left: "0",
+  width: "100%",
+  height: "100%", // full image height
+  background: "rgba(255, 0, 0, 0.2)", // light transparent red
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "20px", // match image border radius
+  opacity: "0",
+  pointerEvents: "none",
+  zIndex: "999",
+  transition: "opacity 0.2s ease",
+});
+
+// === Create overlay text ===
+const deletedText = document.createElement("div");
+deletedText.textContent = "Image Deleted";
+Object.assign(deletedText.style, {
+  fontSize: "28px",
+  fontWeight: "bold",
+  color: "white",
+  textShadow: "0 2px 6px rgba(0,0,0,0.7)",
+  opacity: "0",
+  transform: "scale(0.8)",
+  transition: "opacity 0.2s ease, transform 0.2s ease",
+});
+
+deletedOverlay.appendChild(deletedText);
+imageWrapper.appendChild(deletedOverlay); // add overlay to image wrapper
+
+
+          // *******************************************
+
+
+
+
           // ⬅️ Arrow animation
           const arrowImg = document.createElement("img");
           arrowImg.src =
@@ -991,11 +1187,16 @@ imageWrapper.addEventListener("click", () => {
   deleteBtn.style.transform = "scale(1.3)";
   setTimeout(() => (deleteBtn.style.transform = "scale(1)"), 200);
 
-  setTimeout(() => {
-    if (typeof step4_StaticImageRightScreen === "function") {
-      step4_StaticImageRightScreen();
-    }
-  }, 300);
+
+
+    // ⬅️ Show deleted text + after 1s go to next function
+  showDeletedThenNext();
+
+  // setTimeout(() => {
+  //   if (typeof step4_StaticImageRightScreen === "function") {
+  //     step4_StaticImageRightScreen();
+  //   }
+  // }, 300);
 });
 
 
@@ -1055,6 +1256,10 @@ imageWrapper.addEventListener("click", () => {
               deleteBtn.style.transform = "scale(1.3)";
               setTimeout(() => (deleteBtn.style.transform = "scale(1)"), 200);
 
+  // ⬅️ Show deleted text + after 1s go to next function
+  showDeletedThenNext();
+
+
               setTimeout(() => {
                 if (typeof step4_StaticImageRightScreen === "function") {
                   step4_StaticImageRightScreen();
@@ -1082,6 +1287,30 @@ imageWrapper.addEventListener("click", () => {
               (btn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.15)");
             return btn;
           }
+       
+          // Function to show with animation and then hide
+function showDeletedThenNext() {
+  // Start animation
+  deletedOverlay.style.opacity = "1";
+  deletedText.style.opacity = "1";
+  deletedText.style.transform = "scale(1.1)";
+
+  setTimeout(() => {
+    // End animation
+    deletedOverlay.style.opacity = "0";
+    deletedText.style.opacity = "0";
+    deletedText.style.transform = "scale(0.9)";
+
+    setTimeout(() => {
+      if (typeof step4_StaticImageRightScreen === "function") {
+        step4_StaticImageRightScreen(); // call next step
+      }
+    }, 200); // match transition
+  }, 800); // 1 second visible
+}
+      
+       
+       
         }
 
         // Step 3 end
