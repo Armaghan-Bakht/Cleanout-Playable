@@ -200,10 +200,11 @@
             zIndex: "2",
             pointerEvents: "none",
           });
-          topVideo.autoplay = true;
-          topVideo.playsInline = true;
-          topVideo.muted = true;
-          topVideo.loop = false;
+         topVideo.autoplay = true;  // autoplay chahiye
+topVideo.loop = false;
+topVideo.muted = true;     // must be muted for iOS autoplay
+topVideo.playsInline = true;  // important for iOS Safari to autoplay inline
+topVideo.webkitPlaysInline = true; // extra for older iOS versions
           imageWrapper.appendChild(topVideo);
 
           // Pause (freeze) video when it ends
